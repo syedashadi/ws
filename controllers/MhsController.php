@@ -54,7 +54,7 @@ public function indexAction() { //Index Action
 						$mahasiswaDB->mhsApprove($formData,$id_pd);
 						
 			}
-			//echo"<pre>" ;	print_r ($formData) ;exit();
+			echo"<pre>" ;	print_r ($formData) ;exit();
 		}
 	
   }
