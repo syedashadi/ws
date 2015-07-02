@@ -1,0 +1,53 @@
+<script>
+dojo.addOnLoad(function() {
+	dijit.byId('Mode').set('value','');
+	dijit.byId('Mode').set('placeHolder','Select');
+});
+</script>
+
+<body class='claro'>
+ <fieldset><legend><?php echo $this->translate("Scheme Setup");?></legend>
+ <Form dojoType="dijit.form.Form" id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/schemesetup/newschemesetup" method="post" name="myForm">
+ <script type="dojo/method" event="onSubmit" >
+               if (this.validate()) {
+                   return true;
+                 } else {
+                   return false;
+ 	           }
+ </script>
+<table class="table" width="100%">
+	<tr>
+		<th colspan="4"><?php echo $this->translate("New Scheme Setup");?></th>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("English Description");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjSchemesetupForm->EnglishDescription;?></td>
+		<td><?php echo $this->translate($this->defaultlanguage);?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjSchemesetupForm->ArabicDescription;?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Scheme Code");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjSchemesetupForm->SchemeCode;?></td>
+		<!--
+		// commented on 190712-sp4-10998
+		<td><?php //echo $this->translate("Mode");?><span class="reqMark">*</span></td>
+		<td><?php //echo $this->lobjSchemesetupForm->Mode;?></td>-->
+   </tr>
+	<tr>
+	    <td><?php echo $this->translate("Active");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjSchemesetupForm->Active;?></td>
+		<?php echo $this->lobjSchemesetupForm->UpdDate;?>
+        <?php echo $this->lobjSchemesetupForm->UpdUser;?>
+	    <td></td>
+	    <td></td>
+	</tr>
+</table>
+
+ <table class="table" width="100%">
+      <tr>
+	    <td align="right"><?php echo $this->lobjSchemesetupForm->Save;?>
+		<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'schemesetup', 'action'=>'index'),'default',true);?>';" /></td>
+	 </tr>
+ </table>
+</body>
+

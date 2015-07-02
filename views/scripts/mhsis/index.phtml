@@ -1,0 +1,170 @@
+<script>
+
+
+function getVal(id,element){
+
+	var element_semester = "#idsemesterstatus"+id;
+	
+	var isChecked = $(element).is(':checked');
+
+	if(isChecked==true){		
+		$(element_semester).removeAttr("disabled"); 
+	}else{
+		$(element_semester).attr("disabled", "disabled"); 
+	}
+}
+
+$(function () {
+	 
+	 var str = "";
+	 $('#checkall').click(function () {	
+
+		 var isChecked = $('#checkall').is(':checked');
+
+		 if(isChecked==true){			 
+			 $('.chk').each(function() {
+				    if(this.disabled==false){
+				    	$(this).prop('checked',true);
+				    	$('.chk2').removeAttr("disabled"); 
+				    }
+			 });
+		 }else{
+			 // Un-check
+			 $('.chk').prop('checked', false);
+			 $('.chk2').attr("disabled", "disabled"); 
+		 }
+	 });
+	
+	 
+});
+
+
+
+function approve_list(){
+
+	$("#formStudent").attr("action", "/ws/mhsis/approvelist");
+	$('#formStudent').submit();
+	
+}
+
+</script>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="approve_list();" >
+					<span class='add'></span>
+					<?php echo $this->translate('Approve');?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<fieldset>
+ <legend><?php echo $this->translate("Student Search ");?></legend>
+          <form action="<?php echo $this->baseUrl();?>/ws/mhsis/index/search/1" method="POST">
+           <table width="100%">
+              <tr>
+                  <td ><?php echo $this->translate("Name");?></td>
+                  <td ><?php echo $this->lobjform->field2;?></td>
+                  <td ><?php echo $this->translate("Jantina");?></td>
+                  <td ><?php echo $this->lobjform->field4;?></td>
+              </tr>
+               <tr>
+                  <td ><?php echo $this->translate("ID");?></td>
+                  <td ><?php echo $this->lobjform->field3;?></td>
+                  <?php if(isset($this->lobjform->field3) ){}?> 
+                                   
+               </tr>
+                <tr>
+                   <td align = "center" colspan = "4">
+                   <?php echo $this->lobjform->Search;?>
+				  <!--  <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Add')?>" value='Add' onclick="window.location.href='<?php echo $this->url(array('module'=>'ws','controller'=>'mhs', 'action'=>'newmhs'),'default',true);?>';" />-->
+				   <?php echo $this->lobjform->Clear;?></td>
+				</tr>
+            </table>
+         </form>	
+</fieldset> 
+    <br/>
+
+
+<fieldset>
+
+<form name="formStudent" id="formStudent" method='post' >
+
+	<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	    	<tr>
+	        	<th><?php echo $this->translate("ID");?></th>
+	        		<th><?php echo $this->translate("Registration ID");?></th>
+	        			<th><?php echo $this->translate("Tgl  Masuk SP");?></th>
+	        	<th><?php echo $this->translate("Nama");?></th>
+	       	<!--     <th><?php echo $this->translate("Name Awal");?></th>
+	       	     <th><?php echo $this->translate("Name Tengah");?></th>
+	       	      <th><?php echo $this->translate("Name Akhir");?></th>-->
+	       	    <th><?php echo $this->translate("Tanggal Lahir");?></th>
+	       	     <th><?php echo $this->translate("Tmpt lahir");?></th>
+	       	       	  <th><?php echo $this->translate("Jantina");?></th>
+	       	       	<th><?php echo $this->translate("Agama");?></th>
+	       	       	       <th><?php echo $this->translate("Kewarganegaraan");?></th>
+	       	       	       <th>True/False</th>
+	       	       	          <th><?php echo $this->translate("Status");?></th>
+	       	       	             <th><?php echo $this->translate("Date of Approval");?></th>
+	       	       	        
+	 <th>
+		<input type="checkbox" id="checkall"  value="" > <?php echo $this->translate("Approve All"); ?>				
+		</th>
+	       	       	                  
+	    	</tr>
+	        <?php if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjscheme ): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	        	<td><a href="<?php echo $this->url(array('module'=>'ws','controller'=>'mhsis', 'action'=>'mhsislist' , 'id'=>$lobjscheme['id']),'default',true);?>" ><?php print_r($this->escape($lobjscheme['id']));?></a></td>
+	        	<td><?php echo $this->escape($lobjscheme['registrationId']);?></td>
+	        	<td><?php echo $this->escape($lobjscheme['class_start']);?></td>
+	        	<td><a href="<?php echo $this->url(array('module'=>'ws','controller'=>'mhsis', 'action'=>'mhsislist' , 'id'=>$lobjscheme['id']),'default',true);?>" ><?php echo $this->escape($lobjscheme['appl_fname']);?> <?php echo $this->escape($lobjscheme['appl_mname']);?> <?php echo $this->escape($lobjscheme['appl_lname']);?></td>
+	       <!--<td><a href="<?php echo $this->url(array('module'=>'ws','controller'=>'mhsis', 'action'=>'mhsislist' , 'id'=>$lobjscheme['id']),'default',true);?>" ><?php print_r($this->escape($lobjscheme['appl_fname']));?></a></td>
+	        	<td><?php echo $this->escape($lobjscheme['appl_mname']);?></td>
+	        	<td><?php echo $this->escape($lobjscheme['appl_lname']);?></td> --> 
+	       		 <td><?php echo $this->escape($lobjscheme['appl_dob']);?></td>	
+	        	<td><?php echo $this->escape($lobjscheme['appl_birth_place']);?></td>
+
+	       <td><?php if($lobjscheme['appl_gender']== 1){echo "L";}else if($lobjscheme['appl_gender']== 2){echo "P";}else{  echo "NULL";}?></td>
+	       <td><?php if($lobjscheme['appl_religion']== 5){
+echo "Islam";}
+else if($lobjscheme['appl_religion']== 6){echo "Kristen Katolik";}
+else if($lobjscheme['appl_religion']== 7){echo "Kristen Protestan";}
+else if($lobjscheme['appl_religion']== 8){echo "Budha";}
+else if($lobjscheme['appl_religion']== 10){echo "Hindu";}
+else if($lobjscheme['appl_religion']== 11){echo "Kong Hu Chu ";} 
+else{  echo "NULL";} ?></td>
+<td><?php if($lobjscheme['appl_nationality']== 96){
+echo "Indonesia";}
+else{  echo "Lainnya";} ?></td>
+   <td>
+<?php 
+if($lobjscheme['appl_dob']== null || $lobjscheme['appl_dob']== "null" || $lobjscheme['appl_dob']== ""||
+	$lobjscheme['class_start']== 0000-00-00 || $lobjscheme['class_start']== "null" || $lobjscheme['class_start']== ""||$lobjscheme['class_start']== null 
+		){
+echo "False";}
+else{  echo "True";} ?>
+</td>
+ 	 <td><?php if($lobjscheme['status']== 1){
+echo "Approved";}
+else if($lobjscheme['status']== 0){echo "Null";} 
+else{  echo "NULL";} ?></td>
+ 	 	<td><?php echo $this->escape($lobjscheme['date_of_approval']);?></td>
+	        	<td>		
+		<input class='chk' type="checkbox" name='id[]' id='id[]' value='<?php echo $lobjscheme["id"];?>'></td>
+	
+	        </tr> 
+	        <?php endforeach; ?>
+	        <tr>
+	          <td colspan="5" align="center"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding','/partials/my_pagination_control.phtml'); ?></div></td>
+            </tr><table width="100%" ><tr bgcolor="white" align="right" ><td><input type='submit' class="NormalBtn" dojotype="dijit.form.Button" label='Submit'"></td></tr></table>
+	            <?php endif; ?> 
+			
+</form>
+	</table>
+</fieldset>

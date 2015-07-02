@@ -1,0 +1,160 @@
+<style>
+select{
+	width: 250px;
+}
+</style>
+
+<script>
+function filter_student(){
+
+	var intake = $('#intake').val();
+	var program = $('#program').val();
+
+	var table = $("#result tbody");
+    $(table).empty();
+     
+	$.ajax({
+	      url: "<?php echo Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(); ?>",
+	      type: "post",
+	      async : false,
+	      data: {'intake':intake, 'program':program},
+	      dataType: 'json',
+	      beforeSend: function (){
+	    	  $(table).html('<tr><td colspan="5">Loading...</td></tr>');
+	      },
+	      success: function(data){
+	    	  $(table).empty();
+	          if(data.length>0){
+	        	  for(var i=0; i<data.length; i++){
+		        	  
+			          var content = "<tr>" +
+			          				"<td>"+(i+1)+"</td>"+
+			          				"<td>"+data[i].appl_fname+" "+data[i].appl_mname+" "+data[i].appl_lname+"</td>"+
+			          				"<td>"+data[i].appl_birth_place+"</td>"+
+			          				"<td>"+data[i].appl_dob+"</td>"+
+			          				"<td>"+data[i].appl_gender+"</td>"+
+			          				"<td>"+data[i].appl_religion+"</td>"+
+			          				"<td>"+data[i].registrationId+"</td>"+
+			          				"<td>"+data[i].IntakeId+"</td>"+
+			          				"<td>"+data[i].ArabicName+"</td>"+
+			          				"</tr>"
+		        	  $(table).append(content);
+		          }
+	          }else{
+	        	  var content = '<tr><td colspan="2"> No Search Result </td></tr>';
+	        	  $(table).append(content);
+	          }
+	      },
+	      error:function(){
+	    	  $(table).empty();
+	          alert("failure");
+	      }   
+	}); 
+}
+
+function export_excel(){
+	$("#form_student_report").attr("action", "/reports/government-report/export-student-report");
+	$('#form_student_report').submit();
+	
+}
+
+function copytotemp(){
+	$("#form_student_report").attr("action", "/reports/government-report/copytotemp");
+	$('#form_student_report').submit();
+	
+}
+
+
+</script>
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul><!-- function to send data to table -->
+			<li>
+				<a id="print" href="#" onclick="copytotemp();">
+					<span class='email'></span>
+					<?php echo $this->translate("Send to GovTable"); ?>
+				</a>
+			</li>
+			<li>
+				<a id="print" href="#" onclick="export_excel();">
+					<span class='csv'></span>
+					<?php echo $this->translate("Export CSV"); ?>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<br />
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<br />
+<?}?>
+
+<fieldset>
+	<legend><?php echo $this->translate("Filter");?></legend>
+	<form name="form_student_report" id="form_student_report"  method="post" target="_BLANK">
+	<table>
+		<tr>
+			<td><?php echo $this->translate('Intake'); ?></td>
+			<td>:</td>
+			<td>
+				<select name="intake" id="intake" onchange="filter_student();">
+					<option value='null'><?php echo $this->translate("Please Select");?></option>
+					<?php foreach ($this->intake_list as $intake):?>
+					<option value="<?php echo $intake['key']; ?>"><?php echo $intake['value']; ?></option>
+					<?php endforeach;?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Program'); ?></td>
+			<td>:</td>
+			<td>
+				<select name="program" id="program" onchange="filter_student();">
+					<option value="null"><?php echo $this->translate('All');?></option>
+					<?php foreach ($this->program_list as $program):?>
+					<optgroup label="<?php echo $program['ArabicName'];?> - <?php echo $program['CollegeCode'];?>">
+						<?php for($i=0;$i<sizeof($program['programs']);$i++){?>
+						<option value="<?php echo $program['programs'][$i]['IdProgram']?>" ><?php echo $program['programs'][$i]['ArabicName']?> - <?php echo $program['programs'][$i]['ProgramCode']?></option>
+						<?php }?>
+					</optgroup>
+					<?php endforeach;?>
+				</select>
+			</td>
+		</tr>
+	</table>
+	</form>
+</fieldset>
+<table id="result" class="table" width="100%">
+	<thead>
+		<tr>
+			<th><?php echo $this->translate("Bil");?></th>
+			<th><?php echo $this->translate("Name");?></th>
+			<th><?php echo $this->translate("Tmpt Lahir");?></th>
+			<th><?php echo $this->translate("Tgl Lahir");?></th>
+			<th><?php echo $this->translate("Jantina");?></th>
+			<th><?php echo $this->translate("Agama");?></th>
+			<th><?php echo $this->translate("NIM");?></th>
+			<th><?php echo $this->translate("Intake");?></th>
+			<th><?php echo $this->translate("Program");?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td align="center" colspan="5">&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+<br />
